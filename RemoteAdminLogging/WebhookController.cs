@@ -75,23 +75,27 @@ namespace RemoteAdminLogging
 
             FieldBuilder.Inline = false;
 
-            FieldBuilder.Name = plugin.Translation.User;
+            FieldBuilder.Name = plugin.Translation.User ?? "User";
             FieldBuilder.Value = Codeline(commandLog.Name);
             EmbedBuilder.AddField(FieldBuilder.Build());
 
             if (plugin.Config.ShowUserId)
             {
-                FieldBuilder.Name = plugin.Translation.UserId;
+                FieldBuilder.Name = plugin.Translation.UserId ?? "User Id";
                 FieldBuilder.Value = Codeline(commandLog.Id);
                 EmbedBuilder.AddField(FieldBuilder.Build());
             }
 
-            FieldBuilder.Name = plugin.Translation.CommandExecuted;
+            FieldBuilder.Name = plugin.Translation.CommandExecuted ?? "Command Executed";
             FieldBuilder.Value = Codeline(commandLog.Query);
             EmbedBuilder.AddField(FieldBuilder.Build());
 
-            EmbedBuilder.Title = plugin.Translation.Header;
-            EmbedBuilder.Color = (uint)DSharp4Webhook.Util.ColorUtil.FromHex(plugin.Config.EmbedColor);
+            if (!string.IsNullOrEmpty(plugin.Translation.Header))
+                EmbedBuilder.Title = plugin.Translation.Header;
+
+            if (!string.IsNullOrEmpty(plugin.Config.EmbedColor))
+                EmbedBuilder.Color = (uint)DSharp4Webhook.Util.ColorUtil.FromHex(plugin.Config.EmbedColor);
+
             EmbedBuilder.Timestamp = DateTimeOffset.UtcNow;
             MessageBuilder.AddEmbed(EmbedBuilder.Build());
 
